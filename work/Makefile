@@ -44,7 +44,7 @@ clean:
 	@echo "Cleaning vivado files ..."
 	-rm -rf $(CLEAN_TARGET)
 	
-project:
+project: clean
 	$(VIVADO) create_project.tcl
 	
 
