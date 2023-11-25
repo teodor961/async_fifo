@@ -14,9 +14,20 @@
 module async_fifo #(
     parameter DATA_WIDTH
 ) (
-    input wrst,
-    input wclk,
-    input wdata,
+    // WRITE clock domain signals
+    input  wr_rst,
+    input  wr_clk,
+    input  wr_data,
+    input  wr_en,
+    output full,
+    
+    // READ clock domain signals
+    input  rd_clk,
+    output rd_data,
+    input  rd_en,
+    output empty
+    
+    
 
 );
 
