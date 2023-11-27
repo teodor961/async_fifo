@@ -12,7 +12,8 @@
 //
 
 module async_fifo #(
-    parameter DATA_WIDTH
+    parameter DATA_WIDTH = 8,
+    parameter DEPTH = 10
 ) (
     // WRITE clock domain signals
     input  wr_rst,
