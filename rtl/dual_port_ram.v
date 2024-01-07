@@ -1,17 +1,14 @@
 //--------------------------------------------------
 // Created by : Teodor Dimitrov
 // Design     : async_fifo
-// Module name: async_fifo_top.v
+// Module name: dual_port_ram.v
 //
-// Description: Top level module for the asynchronous fifo design
-//              Design hierarchy is as follows:
-//                async_fifo  -> top module
-//                  \_ mem.v  -> RAM block
-//                  \_ gray.v -> gray encoder for sync logic 
+// Description: parameterized RAM module for async 
+//              fifo project 
 //
 //
 
-module async_mem #(
+module dual_port_ram #(
         parameter DATA_WIDTH = 8,
         parameter DEPTH = 10
     ) (
