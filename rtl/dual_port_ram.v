@@ -10,19 +10,20 @@
 
 module dual_port_ram #(
         parameter DATA_WIDTH = 8,
-        parameter DEPTH = 10
+        parameter DEPTH      = 10,
+        parameter ADDR_WIDTH = $clog2(DEPTH)
     ) (
-        input                             wr_rst,
-        input                             wr_clk,
-        input                             wr_en,
-        input [clog2(DEPTH) - 1 : 0]      wr_addr,
-        input [DATA_WIDTH - 1 : 0]        wr_data,
+        input                           wr_rst,
+        input                           wr_clk,
+        input                           wr_en,
+        input [ADDR_WIDTH - 1 : 0]      wr_addr,
+        input [DATA_WIDTH - 1 : 0]      wr_data,
         
-        input                             rd_clk,
-        input                             rd_en,
-        input      [clog2(DEPTH) - 1 : 0] rd_addr,
-        output reg [DATA_WIDTH - 1 : 0]   rd_data
+        input      [ADDR_WIDTH - 1 : 0] rd_addr,
+        output reg [DATA_WIDTH - 1 : 0] rd_data
     );
+    
+    reg [DATA_WIDTH-1:0] mem [DEPTH-1:0];
     
     integer i;
     
@@ -42,12 +43,9 @@ module dual_port_ram #(
       end
       
     // READ logic
-    always @ (posedge rd_clk)
+    always @(*)
       begin
-          if (rd_en)
-            begin
-                rd_data <= mem[rd_addr];
-            end
+          rd_data <= mem[rd_addr];
       end
     
 endmodule
