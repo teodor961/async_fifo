@@ -9,7 +9,7 @@
 //
 
 module bin2gray #(
-        parameter WIDTH = 8,
+        parameter WIDTH = 8
     ) (
         input  [WIDTH-1 : 0] binary_in,
         output [WIDTH-1 : 0] gray_out
