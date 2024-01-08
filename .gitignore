@@ -100,3 +100,5 @@ device-tree/
 *.debug
 *.tmp
 *.mem
+*xsim.dir*
+*.pb
