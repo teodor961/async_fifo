@@ -7,14 +7,14 @@
 //              Design hierarchy is as follows:
 //                async_fifo  -> top module
 //                  \_ mem.v  -> RAM block
-//                  \_ gray.v -> gray encoder for sync logic 
+//                  \_ bin2gray.v -> gray encoder for sync logic 
+//                  \_ gray2bin.v -> gray decoder for sync logic 
 //
-//
-
-module async_fifo #(
+// TODO: Create gray2bin decoder module!!!
+module async_fifo_top #(
     parameter DATA_WIDTH = 8,
     parameter DEPTH = 10,
-    parameter FULL_RST_STATE = 0;
+    parameter FULL_RST_STATE = 0
 ) (
     // WRITE clock domain signals
     input                   wr_rst,
@@ -36,31 +36,34 @@ module async_fifo #(
   localparam ADDR_WIDTH = $clog2(DEPTH);
   
   // WRITE domain signals
-  reg                  full_r;
-  reg [ADDR_WIDTH-1:0] wr_ptr;
-  reg [ADDR_WIDTH-1:0] wr_ptr_gray;
-  reg [ADDR_WIDTH-1:0] rd_ptr_gray_synced;
-  reg [ADDR_WIDTH-1:0] rd_ptr_synced;
-  reg [ADDR_WIDTH-1:0] rd_ptr_synced_minus_one;
+  reg                   full_r;
+  reg  [ADDR_WIDTH-1:0] wr_ptr;
+  wire [ADDR_WIDTH-1:0] wr_ptr_gray;
+  wire [ADDR_WIDTH-1:0] rd_ptr_gray_synced;
+  reg  [ADDR_WIDTH-1:0] rd_ptr_synced;
+  wire [ADDR_WIDTH-1:0] rd_ptr_synced_minus_one;
   
   // READ domain signals
-  reg                  rd_rst;
-  reg                  empty_r;
-  reg [ADDR_WIDTH-1:0] rd_ptr;
-  reg [ADDR_WIDTH-1:0] rd_ptr_gray;
-  reg [ADDR_WIDTH-1:0] wr_ptr_gray_synced;
-  reg [ADDR_WIDTH-1:0] wr_ptr_synced;
+  wire                  rd_rst;
+  reg                   empty_r;
+  reg  [ADDR_WIDTH-1:0] rd_ptr;
+  wire [ADDR_WIDTH-1:0] rd_ptr_gray;
+  wire [ADDR_WIDTH-1:0] wr_ptr_gray_synced;
+  reg  [ADDR_WIDTH-1:0] wr_ptr_synced;
   
 
-  dual_port_ram (
+  dual_port_ram #(
+      .DATA_WIDTH (DATA_WIDTH),
+      .DEPTH      (DEPTH)
+  ) fifo_ram (
       .wr_rst   (wr_rst),
       .wr_clk   (wr_clk),
       .wr_en    (wr_en),
       .wr_addr  (wr_ptr),
       .wr_data  (wr_data),
       
-      .rd_addr  (),
-      .rd_data  ()
+      .rd_addr  (rd_ptr),
+      .rd_data  (rd_data)
   );
 
   always @(posedge wr_clk)
@@ -73,7 +76,7 @@ module async_fifo #(
           begin
               wr_ptr <= (wr_ptr == DEPTH - 1) ? 0 : wr_ptr + 1;
           end
-        else if (wr_en $$ full_r)
+        else if (wr_en && full_r)
           begin
               overflow <= 1;
           end
