@@ -102,3 +102,4 @@ device-tree/
 *.mem
 *xsim.dir*
 *.pb
+*.wdb
