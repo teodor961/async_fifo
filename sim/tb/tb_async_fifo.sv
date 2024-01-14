@@ -16,6 +16,8 @@ module tb_async_fifo (
     logic tb_rd_clk = 0;
     logic [7:0] tb_wr_data = 0;
     
+    logic [31:0] error_count = 0;
+    
     parameter WR_CLK_PERIOD = 4;
     parameter RD_CLK_PERIOD = 5;
     
@@ -49,6 +51,28 @@ module tb_async_fifo (
     
     initial begin
         forever #(RD_CLK_PERIOD) tb_rd_clk <= ~tb_rd_clk;
+    end
+    
+    initial begin
+      $display("Begin simulation tb_es_buffer_elastic");
+      #1us;
+      
+      
+      // TALLY UP COUNTED ERRORS
+      if (error_count == 32'h0000_0000)
+        begin
+            $display("##########################");
+            $display("## TEST CASE SUCCESSFUL ##");
+            $display("##########################");
+        end
+      else 
+        begin
+            $display("######################");
+            $display("## TEST CASE FAILED ##");
+            $display("######################");
+            $display("Number of failures: %0d", error_count);
+        end
+      $finish;
     end
 
 endmodule
