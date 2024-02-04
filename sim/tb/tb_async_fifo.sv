@@ -6,6 +6,8 @@
 // Description: Basic testbench for the async fifo module.
 //
 //
+`include "uvm_macros.svh"
+import uvm_pkg::*;
 
 module tb_async_fifo (
 
@@ -25,54 +27,34 @@ module tb_async_fifo (
     parameter DEPTH      = 16;
     parameter FULL_RST_STATE = 0;
     
+    async_fifo_interface #(.DATA_WIDTH(DATA_WIDTH)) u_async_fifo_interface (tb_wr_clk, tb_rd_clk);
+    
     async_fifo_top #(
         .DATA_WIDTH     (DATA_WIDTH),
         .DEPTH          (DEPTH),
         .FULL_RST_STATE (FULL_RST_STATE)
     ) dut (
-        .wr_rst    (tb_wr_rst),
-        .wr_clk    (tb_wr_clk),
-        .wr_data   (tb_wr_data),
-        .wr_en     (1'b1),
-        .full      (),
-        .overflow  (),
+        .wr_rst    (u_async_fifo_interface.wr_rst),
+        .wr_clk    (u_async_fifo_interface.wr_clk),
+        .wr_data   (u_async_fifo_interface.wr_data),
+        .wr_en     (u_async_fifo_interface.wr_en),
+        .full      (u_async_fifo_interface.full),
+        .overflow  (u_async_fifo_interface.overflow),
     
     // READ clock domain signals
-        .rd_clk    (),
-        .rd_data   (),
-        .rd_en     (1'b0),
-        .empty     (),
-        .underflow ()
+        .rd_clk    (u_async_fifo_interface.rd_clk),
+        .rd_data   (u_async_fifo_interface.rd_data),
+        .rd_en     (u_async_fifo_interface.rd_en),
+        .empty     (u_async_fifo_interface.empty),
+        .underflow (u_async_fifo_interface.underflow)
     );
     
     initial begin
-        forever #(WR_CLK_PERIOD) tb_wr_clk <= ~tb_wr_clk;
-    end
-    
-    initial begin
-        forever #(RD_CLK_PERIOD) tb_rd_clk <= ~tb_rd_clk;
-    end
-    
-    initial begin
-      $display("Begin simulation tb_es_buffer_elastic");
-      #1us;
+      $display("Begin simulation");
       
+      uvm_config_db#(virtual async_fifo_interface)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_interface);
+      run_test();
       
-      // TALLY UP COUNTED ERRORS
-      if (error_count == 32'h0000_0000)
-        begin
-            $display("##########################");
-            $display("## TEST CASE SUCCESSFUL ##");
-            $display("##########################");
-        end
-      else 
-        begin
-            $display("######################");
-            $display("## TEST CASE FAILED ##");
-            $display("######################");
-            $display("Number of failures: %0d", error_count);
-        end
-      $finish;
     end
 
 endmodule
