@@ -27,32 +27,32 @@ module tb_async_fifo (
     parameter DEPTH      = 16;
     parameter FULL_RST_STATE = 0;
     
-    async_fifo_interface #(.DATA_WIDTH(DATA_WIDTH)) u_async_fifo_interface (tb_wr_clk, tb_rd_clk);
+    async_fifo_if #(.DATA_WIDTH(DATA_WIDTH)) u_async_fifo_if (tb_wr_clk, tb_rd_clk);
     
     async_fifo_top #(
         .DATA_WIDTH     (DATA_WIDTH),
         .DEPTH          (DEPTH),
         .FULL_RST_STATE (FULL_RST_STATE)
     ) dut (
-        .wr_rst    (u_async_fifo_interface.wr_rst),
-        .wr_clk    (u_async_fifo_interface.wr_clk),
-        .wr_data   (u_async_fifo_interface.wr_data),
-        .wr_en     (u_async_fifo_interface.wr_en),
-        .full      (u_async_fifo_interface.full),
-        .overflow  (u_async_fifo_interface.overflow),
+        .wr_rst    (u_async_fifo_if.wr_rst),
+        .wr_clk    (u_async_fifo_if.wr_clk),
+        .wr_data   (u_async_fifo_if.wr_data),
+        .wr_en     (u_async_fifo_if.wr_en),
+        .full      (u_async_fifo_if.full),
+        .overflow  (u_async_fifo_if.overflow),
     
     // READ clock domain signals
-        .rd_clk    (u_async_fifo_interface.rd_clk),
-        .rd_data   (u_async_fifo_interface.rd_data),
-        .rd_en     (u_async_fifo_interface.rd_en),
-        .empty     (u_async_fifo_interface.empty),
-        .underflow (u_async_fifo_interface.underflow)
+        .rd_clk    (u_async_fifo_if.rd_clk),
+        .rd_data   (u_async_fifo_if.rd_data),
+        .rd_en     (u_async_fifo_if.rd_en),
+        .empty     (u_async_fifo_if.empty),
+        .underflow (u_async_fifo_if.underflow)
     );
     
     initial begin
       $display("Begin simulation");
       
-      uvm_config_db#(virtual async_fifo_interface)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_interface);
+      uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
       run_test();
       
     end
