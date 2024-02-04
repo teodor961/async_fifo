@@ -60,7 +60,7 @@ gui:
 
 xsim.dir/work/tb_async_fifo.sdb: tb/tb_async_fifo.sv
 	@echo -n "Compile testbench $(HL)tb_async_fifo$(NC) ... "; 
-	@if xvlog -sv tb/tb_async_fifo.sv > tb_async_fifo_compile.log; then \
+	@if xvlog -sv -L uvm tb/tb_async_fifo.sv > tb_async_fifo_compile.log; then \
 	    echo " $(GREEN)OK$(NC)"; \
 	else \
 	    echo " $(RED)FAILED$(NC)"; \
