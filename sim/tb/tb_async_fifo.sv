@@ -6,8 +6,8 @@
 // Description: Basic testbench for the async fifo module.
 //
 //
-`include "uvm_macros.svh"
 import uvm_pkg::*;
+`include "uvm_macros.svh"
 
 module tb_async_fifo (
 
