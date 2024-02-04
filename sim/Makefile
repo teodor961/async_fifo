@@ -42,6 +42,16 @@ RTL_DEPS += ../rtl/bin2gray.v
 RTL_DEPS += ../rtl/dual_port_ram.v
 RTL_DEPS += ../rtl/cdc_dff.v
 
+TB_DEPS += tb/tb_async_fifo.sv
+TB_DEPS += tb/async_fifo_seq_item.sv
+TB_DEPS += tb/async_fifo_driver.sv
+TB_DEPS += tb/async_fifo_agent.sv
+TB_DEPS += tb/async_fifo_env.sv
+TB_DEPS += tb/async_fifo_if.sv
+TB_DEPS += tb/async_fifo_sequencer.sv
+TB_DEPS += tb/async_fifo_sequence.sv
+TB_DEPS += tb/async_fifo_test_basic.sv
+
 
 SIM_SWITCH := --t
 GUI := 0
@@ -58,9 +68,9 @@ clean:
 gui:
 	$(eval GUI := 1)
 
-xsim.dir/work/tb_async_fifo.sdb: tb/tb_async_fifo.sv
+xsim.dir/work/tb_async_fifo.sdb: $(TB_DEPS)
 	@echo -n "Compile testbench $(HL)tb_async_fifo$(NC) ... "; 
-	@if xvlog -sv -L uvm tb/tb_async_fifo.sv > tb_async_fifo_compile.log; then \
+	@if xvlog -sv -L uvm $(TB_DEPS) > tb_async_fifo_compile.log; then \
 	    echo " $(GREEN)OK$(NC)"; \
 	else \
 	    echo " $(RED)FAILED$(NC)"; \
