@@ -52,7 +52,7 @@ GUI := 0
 all: results_tb_async_fifo
 
 clean:
-	@echo "Cleaning $(HL)building blocks$(NC) simulation files ..."
+	@echo "Cleaning $(HL)tb_async_fifo$(NC) simulation files ..."
 	@rm -rf $(CLEAN_TARGET)
 	
 gui:
