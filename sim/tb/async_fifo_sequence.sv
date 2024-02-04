@@ -14,20 +14,20 @@ class fifo_sequence extends uvm_sequence;
         super.new(name);
     endfunction
     
-    rand int num_transactions // Number of sequence items to send
+    rand int num_transactions; // Number of sequence items to send
     
-    constraint num_trans_limits { soft num inside {[2:5]}; }
+    constraint num_trans_limits { num_transactions inside {[2:5]}; }
     
     virtual task body();
         repeat (num_transactions) begin
             fifo_seq_item m_item = fifo_seq_item::type_id::create("m_item");
             start_item(m_item);
-            m_item.randomzie();
+            m_item.randomize();
             `uvm_info("SEQ", $sformatf("Generate new item: "), UVM_LOW)
             m_item.print();
             finish_item(m_item);
         end
-        `uvm_info("SEQ", $sformatf("Done generation of %0d items", num), UVM_LOW)
+        `uvm_info("SEQ", $sformatf("Done generation of %0d items", num_transactions), UVM_LOW)
     endtask
     
 endclass

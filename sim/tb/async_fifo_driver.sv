@@ -9,7 +9,7 @@
 //
 
 class async_fifo_driver #(parameter int DATA_WIDTH=8) extends uvm_driver #(fifo_seq_item);
-    `uvm_component_utils(driver)
+    `uvm_component_utils(async_fifo_driver)
     
     function new(string name = "async_fifo_driver", uvm_component parent=null);
         super.new(name, parent);
@@ -36,8 +36,15 @@ class async_fifo_driver #(parameter int DATA_WIDTH=8) extends uvm_driver #(fifo_
         end
     endtask
     
-    virtual task drive_item(fifo_seq_item m_item)
-         if (async_fifo_vif.full
+    virtual task drive_item(fifo_seq_item m_item);
+         for (int i = 0; i < m_item.data_depth; i++) 
+           begin
+               async_fifo_vif.wr_en <= 0;
+               wait(async_fifo_vif.full == 0)
+               @(posedge async_fifo_vif.wr_clk)
+               async_fifo_vif.wr_data <= m_item.data_vector[i];
+               async_fifo_vif.wr_en <= 1;
+           end
     endtask
     
 endclass

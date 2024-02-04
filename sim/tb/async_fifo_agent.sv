@@ -9,7 +9,7 @@
 
 class async_fifo_agent #(parameter DATA_WIDTH=8) extends uvm_agent;
     
-    `uvm_component_utils(agent)
+    `uvm_component_utils(async_fifo_agent)
     
     function new(string name="agent", uvm_component parent=null);
         super.new(name, parent);

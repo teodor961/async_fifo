@@ -24,7 +24,7 @@ class async_fifo_env #(parameter int DATA_WIDTH=8) extends uvm_env;
         //u_async_fifo_scoreboard = async_fifo_scoreboard::type_id::create("u_async_fifo_scoreboard", this);
     endfunction
     
-    virtual function void connect_phase(uvm_phase phase)
+    virtual function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         // u_async_fifo_agent.u_async_fifo.connect(u_async_fifo_scoreboard.m_analysis_imp);
     endfunction

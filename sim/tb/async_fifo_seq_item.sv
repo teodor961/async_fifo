@@ -11,6 +11,7 @@
 class fifo_seq_item #(parameter int DATA_WIDTH = 8, int DEPTH = 10) extends uvm_sequence_item;
     rand  bit [DATA_WIDTH-1: 0] data_vector [];
     rand  int data_depth;
+          integer data_width_i = DATA_WIDTH;
     
     // Constrain data vector to twice the depth at most
     constraint max_depth { data_depth < 2*DEPTH; }
@@ -19,12 +20,12 @@ class fifo_seq_item #(parameter int DATA_WIDTH = 8, int DEPTH = 10) extends uvm_
         super.new(name);
     endfunction
     
-    virtual function void pre_randomize();
+    function void pre_randomize();
         data_vector = new[data_depth];
     endfunction
     
     `uvm_object_utils_begin(fifo_seq_item)
-        `uvm_field_int (DATA_WIDTH, UVM_DEFAULT)
+        `uvm_field_int (data_width_i, UVM_DEFAULT)
         `uvm_field_int (data_depth, UVM_DEFAULT)
     `uvm_object_utils_end
     

@@ -9,7 +9,7 @@
 //
 
 class async_fifo_test #(parameter int DATA_WIDTH = 8) extends uvm_test;
-    `uvm_component_utils(test)
+    `uvm_component_utils(async_fifo_test)
     
     function new(string name = "async_fifo_test", uvm_component parent=null);
         super.new(name, parent);
@@ -19,7 +19,7 @@ class async_fifo_test #(parameter int DATA_WIDTH = 8) extends uvm_test;
     
     virtual async_fifo_if async_fifo_vif;
     
-    virtual function void build_phase(uvm_phase phase)
+    virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         u_async_fifo_env = u_async_fifo_env::type_id::create("u_async_fifo_env", this);
         if (!uvm_config_db #(virtual async_fifo_if)::get(this, "", "async_fifo_vif", async_fifo_vif))
@@ -27,11 +27,11 @@ class async_fifo_test #(parameter int DATA_WIDTH = 8) extends uvm_test;
         uvm_config_db#(virtual async_fifo_if)::set(this, "async_fifo_env.async_fifo_agent.*", "async_fifo_vif", async_fifo_vif);
     endfunction
     
-    virtual function void run_phase(uvm_phase phase);
+    virtual task run_phase(uvm_phase phase);
         fifo_sequence seq = fifo_sequence::type_id::create("seq");
         phase.raise_objection(this);
         apply_reset();
-    endfunction
+    endtask
     
     virtual task apply_reset();
         async_fifo_vif.wr_rst <= 1;
