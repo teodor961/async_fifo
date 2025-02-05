@@ -49,11 +49,17 @@ module tb_async_fifo (
         .underflow (u_async_fifo_if.underflow)
     );
     
+integer i;
+    
     initial begin
       $display("Begin simulation");
-      
+
+if($value$plusargs("INTG=%d",i))
+$display(" GOT INTEGER ");
+$display(" Integer is %d ",i);
+    
       uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
-      run_test();
+      run_test("async_fifo_test");
       
     end
 

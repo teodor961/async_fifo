@@ -53,7 +53,7 @@ TB_DEPS += tb/async_fifo_sequence.sv
 TB_DEPS += tb/async_fifo_test_basic.sv
 
 
-SIM_SWITCH := --t
+SIM_SWITCH := --testplusarg {"+UVM_NO_RELNOTES INTG=123"} --t
 GUI := 0
 
 

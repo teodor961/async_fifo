@@ -8,10 +8,10 @@
 //
 //
 
-class async_fifo_test #(parameter int DATA_WIDTH = 8) extends uvm_test;
-    `uvm_component_utils(async_fifo_test)
+class async_fifo_test_basic #(parameter int DATA_WIDTH = 8) extends uvm_test;
+    `uvm_component_utils(async_fifo_test_basic)
     
-    function new(string name = "async_fifo_test", uvm_component parent=null);
+    function new(string name = "async_fifo_test_basic", uvm_component parent=null);
         super.new(name, parent);
     endfunction
     
