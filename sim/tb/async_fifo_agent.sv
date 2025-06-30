@@ -7,7 +7,7 @@
 //              Extends uvm_agent class
 //
 
-class async_fifo_agent #(parameter DATA_WIDTH=8) extends uvm_agent;
+class async_fifo_agent extends uvm_agent;
     
     `uvm_component_utils(async_fifo_agent)
     
@@ -15,7 +15,7 @@ class async_fifo_agent #(parameter DATA_WIDTH=8) extends uvm_agent;
         super.new(name, parent);
     endfunction
 
-    async_fifo_driver #(.DATA_WIDTH(DATA_WIDTH) ) u_async_fifo_driver;    // Driver handle
+    async_fifo_driver                             u_async_fifo_driver;    // Driver handle
     //async_fifo_monitor                          u_async_fifo_monitor;   // Monitor handle
     uvm_sequencer  #(fifo_seq_item)               u_async_fifo_sequencer; // Sequencer handle
 
@@ -23,7 +23,7 @@ class async_fifo_agent #(parameter DATA_WIDTH=8) extends uvm_agent;
         super.build_phase(phase);
         u_async_fifo_driver = async_fifo_driver::type_id::create("u_async_fifo_driver", this);
         //u_async_fifo_monitor = async_fifo_monitor::type_id::create("u_async_fifo_monitor", this);
-        u_async_fifo_sequencer = uvm_sequencer#(fifo_seq_item)::type_id::create("u_async_fifo_driver", this);
+        u_async_fifo_sequencer = uvm_sequencer#(fifo_seq_item)::type_id::create("u_async_fifo_sequencer", this);
     endfunction
     
     virtual function void connect_phase(uvm_phase phase);

@@ -8,14 +8,14 @@
 //
 //
 
-class async_fifo_env #(parameter int DATA_WIDTH=8) extends uvm_env;
+class async_fifo_env extends uvm_env;
     `uvm_component_utils(async_fifo_env)
     
     function new(string name="async_fifo_env", uvm_component parent=null);
         super.new(name, parent);
     endfunction
     
-    async_fifo_agent #(.DATA_WIDTH(DATA_WIDTH)) u_async_fifo_agent; // agent handle
+    async_fifo_agent u_async_fifo_agent; // agent handle
     //async_fifo_scoreboard u_async_fifo_scoreboard; // scoreboard handle
     
     virtual function void build_phase(uvm_phase phase);

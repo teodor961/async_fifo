@@ -8,16 +8,14 @@
 //
 //
 
-class async_fifo_driver #(parameter int DATA_WIDTH=8) extends uvm_driver #(fifo_seq_item);
+class async_fifo_driver extends uvm_driver #(fifo_seq_item);
     `uvm_component_utils(async_fifo_driver)
     
     function new(string name = "async_fifo_driver", uvm_component parent=null);
         super.new(name, parent);
     endfunction
     
-    virtual async_fifo_if #(
-        .DATA_WIDTH(DATA_WIDTH)
-    ) async_fifo_vif;
+    virtual async_fifo_if async_fifo_vif;
     
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);

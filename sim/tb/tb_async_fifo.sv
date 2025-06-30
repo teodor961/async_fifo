@@ -57,9 +57,11 @@ integer i;
 if($value$plusargs("INTG=%d",i))
 $display(" GOT INTEGER ");
 $display(" Integer is %d ",i);
-    
+      uvm_factory::get().print();
+      
+      uvm_config_db#(int)::set(null, "*", "DATA_WIDTH", DATA_WIDTH);
       uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
-      run_test("async_fifo_test");
+      run_test("async_fifo_test_basic");
       
     end
 
