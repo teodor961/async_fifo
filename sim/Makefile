@@ -43,12 +43,12 @@ RTL_DEPS += ../rtl/dual_port_ram.v
 RTL_DEPS += ../rtl/cdc_dff.v
 
 TB_DEPS += tb/async_fifo_seq_item.sv
+TB_DEPS += tb/async_fifo_sequence.sv
+TB_DEPS += tb/async_fifo_sequencer.sv
 TB_DEPS += tb/async_fifo_driver.sv
 TB_DEPS += tb/async_fifo_agent.sv
 TB_DEPS += tb/async_fifo_env.sv
 TB_DEPS += tb/async_fifo_if.sv
-TB_DEPS += tb/async_fifo_sequencer.sv
-TB_DEPS += tb/async_fifo_sequence.sv
 TB_DEPS += tb/async_fifo_test_basic.sv
 TB_DEPS += tb/tb_async_fifo.sv
 
