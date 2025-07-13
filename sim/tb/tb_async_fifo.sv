@@ -51,18 +51,35 @@ module tb_async_fifo (
     
 integer i;
     
-    initial begin
-      $display("Begin simulation");
+    initial
+      begin
+          forever #(WR_CLK_PERIOD) tb_wr_clk <= ~tb_wr_clk;
+      end
+      
+    initial
+      begin
+          forever #(RD_CLK_PERIOD) tb_rd_clk <= ~tb_rd_clk;
+      end
+      
+    fifo_seq_item seq_item;
+    
+    initial 
+      begin
+          $display("Begin simulation");
 
-if($value$plusargs("INTG=%d",i))
-$display(" GOT INTEGER ");
-$display(" Integer is %d ",i);
-      uvm_factory::get().print();
+          //if($value$plusargs("INTG=%d",i))
+          //  $display(" GOT INTEGER ");
+          //$display(" Integer is %d ",i);
+          uvm_factory::get().print();
+          
+          $display("Testing Sequence Item");
+          seq_item = fifo_seq_item::type_id::create();
+          seq_item.randomize();
+          seq_item.print();
       
-      uvm_config_db#(int)::set(null, "*", "DATA_WIDTH", DATA_WIDTH);
-      uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
-      run_test("async_fifo_test_basic");
-      
-    end
+          uvm_config_db#(int)::set(null, "*", "DATA_WIDTH", DATA_WIDTH);
+          uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
+          run_test("async_fifo_test_basic");
+      end
 
 endmodule
