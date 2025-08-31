@@ -35,16 +35,24 @@ class async_fifo_driver extends uvm_driver #(fifo_seq_item);
     endtask
     
     virtual task drive_item(fifo_seq_item m_item);
+         // Set wr_en initial state
+         async_fifo_vif.wr_en <= 0;
          for (int i = 0; i < m_item.data_depth; i++) 
            begin
-               async_fifo_vif.wr_en <= 0;
-               `uvm_info("DRIVER", $sformatf("Wait for full to drop"), UVM_HIGH) 
+               `uvm_info("DRIVER", $sformatf("Wait for full to drop"), UVM_HIGH)
+               if (async_fifo_vif.full == 1)
+                 begin
+                     async_fifo_vif.wr_en <= 0;
+                 end
                wait(async_fifo_vif.full == 0)
                `uvm_info("DRIVER", $sformatf("Full FIFO flag dropped"), UVM_HIGH) 
                @(posedge async_fifo_vif.wr_clk)
                async_fifo_vif.wr_data <= m_item.data_vector[i];
                async_fifo_vif.wr_en <= 1;
            end
+           
+         async_fifo_vif.wr_en <= 0;
+         #200ns;
     endtask
     
 endclass
