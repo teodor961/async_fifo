@@ -50,6 +50,13 @@ module tb_async_fifo (
     );
     
 integer i;
+
+      initial begin
+      // Manual timeout after 1 millisecond
+      #1ms;
+      `uvm_error("TIMEOUT", "Simulation timeout reached after 1ms. Ending simulation.")
+      $fatal;
+    end
     
     initial
       begin
