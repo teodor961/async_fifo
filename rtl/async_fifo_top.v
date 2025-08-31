@@ -164,7 +164,7 @@ module async_fifo_top #(
           end
     end
     
-  assign ful = full_r;
+  assign full = full_r;
   assign empty = empty_r;
     
     
