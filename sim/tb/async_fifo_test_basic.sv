@@ -29,9 +29,21 @@ class async_fifo_test_basic extends uvm_test;
         uvm_config_db#(virtual async_fifo_if)::set(this, "async_fifo_env.async_fifo_agent.*", "async_fifo_vif", async_fifo_vif);
         
     endfunction
+
+    virtual function void end_of_elaboration_phase (uvm_phase phase);
+        uvm_top.print_topology ();
+    endfunction
     
     virtual task run_phase(uvm_phase phase);
         fifo_sequence seq = fifo_sequence::type_id::create("seq");
+
+		// Randomize the sequence object itself
+		if (!seq.randomize()) begin
+		  `uvm_error("TEST", "Sequence randomization failed!")
+		end
+		else begin
+		  `uvm_info("TEST", "Successfully randomized sequence!", UVM_LOW)
+		end
         phase.raise_objection(this);
         apply_reset();
         

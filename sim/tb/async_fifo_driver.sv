@@ -20,14 +20,14 @@ class async_fifo_driver extends uvm_driver #(fifo_seq_item);
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
         if (!uvm_config_db#(virtual async_fifo_if)::get(this, "", "async_fifo_vif", async_fifo_vif))
-        `uvm_fatal("DRV", "Could not get vif")
+        `uvm_fatal("DRIVER", "Could not get vif")
     endfunction
     
     virtual task run_phase(uvm_phase phase);
         super.run_phase(phase);
         forever begin
             fifo_seq_item m_item;
-            `uvm_info("DRV", $sformatf("Wait for item from sequencer"), UVM_LOW) 
+            `uvm_info("DRIVER", $sformatf("Wait for item from sequencer"), UVM_LOW) 
             seq_item_port.get_next_item(m_item);
             drive_item(m_item);
             seq_item_port.item_done();
@@ -38,7 +38,9 @@ class async_fifo_driver extends uvm_driver #(fifo_seq_item);
          for (int i = 0; i < m_item.data_depth; i++) 
            begin
                async_fifo_vif.wr_en <= 0;
+               `uvm_info("DRIVER", $sformatf("Wait for full to drop"), UVM_HIGH) 
                wait(async_fifo_vif.full == 0)
+               `uvm_info("DRIVER", $sformatf("Full FIFO flag dropped"), UVM_HIGH) 
                @(posedge async_fifo_vif.wr_clk)
                async_fifo_vif.wr_data <= m_item.data_vector[i];
                async_fifo_vif.wr_en <= 1;

@@ -29,6 +29,7 @@ class async_fifo_agent extends uvm_agent;
     virtual function void connect_phase(uvm_phase phase);
         super.connect_phase(phase);
         u_async_fifo_driver.seq_item_port.connect(u_async_fifo_sequencer.seq_item_export);
+        `uvm_info("AGENT","Connected driver.seq_item_port -> sequencer.seq_item_export", UVM_LOW)
     endfunction
 
 endclass

@@ -23,11 +23,11 @@ class fifo_sequence extends uvm_sequence;
             fifo_seq_item m_item = fifo_seq_item::type_id::create("m_item");
             start_item(m_item);
             m_item.randomize();
-            `uvm_info("SEQ", $sformatf("Generate new item: "), UVM_LOW)
+            `uvm_info("SEQUENCE", $sformatf("Generate new item: "), UVM_LOW)
             m_item.print();
             finish_item(m_item);
         end
-        `uvm_info("SEQ", $sformatf("Done generation of %0d items", num_transactions), UVM_LOW)
+        `uvm_info("SEQUENCE", $sformatf("Done generation of %0d items", num_transactions), UVM_LOW)
     endtask
     
 endclass
