@@ -42,8 +42,20 @@ interface async_fifo_if #(parameter DATA_WIDTH = 8) (input wr_clk, input rd_clk)
       output underflow;
     endclocking
     
-    modport DRV_PORT (clocking write_clk, input wr_clk);
-    modport MON_PORT (clocking read_clk, input rd_clk);
+    modport FIFO_PORTS (clocking write_clk, 
+                        input    wr_clk,
+                        input    rd_clk,
+                        input    wr_en,
+                        input    wr_data,
+                        output   full,
+                        output   overflow,
+                        
+                        input     rd_en,
+                        output    rd_data,
+                        output    empty,
+                        output    underflow
+                        );
+
     
 endinterface
     
