@@ -52,8 +52,9 @@ TB_DEPS += tb/async_fifo_if.sv
 TB_DEPS += tb/async_fifo_test_basic.sv
 TB_DEPS += tb/tb_async_fifo.sv
 
-SIM_SEED := $(shell echo $$RANDOM)
-SIM_SWITCH := --sv_seed $SIM_SEED --testplusarg {"+UVM_NO_RELNOTES INTG=123"} --t
+SIM_SEED := $(shell bash -c 'echo $$RANDOM')
+#SIM_SEED := 1000
+SIM_SWITCH := --sv_seed $(SIM_SEED) --testplusarg {"UVM_NO_RELNOTES INTG=123 UVM_VERBOSITY=UVM_HIGH"} --t
 GUI := 0
 
 
@@ -67,6 +68,7 @@ clean:
 	
 gui:
 	$(eval GUI := 1)
+	@true
 
 xsim.dir/work/tb_async_fifo.sdb: $(TB_DEPS)
 	@echo -n "Compile testbench $(HL)tb_async_fifo$(NC) ... "; 
@@ -78,7 +80,7 @@ xsim.dir/work/tb_async_fifo.sdb: $(TB_DEPS)
 	    exit 1; \
 	fi;
 	
-xsim.dir/work/async_fifo.sdb: $(RTL_DEPS)
+xsim.dir/work/async_fifo_top.sdb: $(RTL_DEPS)
 	@echo -n "Compile design sources for $(HL)async_fifo$(NC) ... "
 	@if xvlog $(RTL_DEPS) > async_fifo_compile.log; then \
 		echo " $(GREEN)OK$(NC)"; \
@@ -88,18 +90,21 @@ xsim.dir/work/async_fifo.sdb: $(RTL_DEPS)
 	    exit 1; \
 	fi;
 	
-elab_tb_async_fifo: xsim.dir/work/async_fifo.sdb xsim.dir/work/tb_async_fifo.sdb
+xsim.dir/work.tb_async_fifo/elaborated: xsim.dir/work/async_fifo_top.sdb xsim.dir/work/tb_async_fifo.sdb
 	@echo -n "Elaborate $(HL)tb_async_fifo$(NC) ... "
 	@if xelab --relax --debug all tb_async_fifo > tb_async_fifo_elab.log; then \
 	    echo " $(GREEN)OK$(NC)"; \
+	    touch xsim.dir/work.tb_async_fifo/elaborated; \
 	else \
 	    echo " $(RED)FAILED$(NC)"; \
 	    echo "For details see $(HL)$(CURDIR)/tb_async_fifo_elab.log$(NC)"; \
 	    exit 1; \
 	fi;
 
-sim_tb_async_fifo: clean elab_tb_async_fifo
-	@echo -n "Run simulation for $(HL)tb_async_fifo$(NC) ... "
+elab_tb_async_fifo: xsim.dir/work.tb_async_fifo/elaborated
+
+sim_tb_async_fifo: elab_tb_async_fifo
+	@echo -n "Run simulation for $(HL)tb_async_fifo$(NC) with SEED=$(HL)$(SIM_SEED)$(NC) ... "
 	@xsim tb_async_fifo $(SIM_SWITCH) sim_tb_async_fifo.tcl > tb_async_fifo_sim.log
 	@if [ $(GUI) -eq "1" ]; then \
 		echo "LAUNCH WAVEFORM VIEWER"; \
