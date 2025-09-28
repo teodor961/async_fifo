@@ -10,7 +10,7 @@
 //                  \_ bin2gray.v -> gray encoder for sync logic 
 //                  \_ gray2bin.v -> gray decoder for sync logic 
 //
-// TODO: Create gray2bin decoder module!!!
+// TODO: Create handshake synchronizer to replace 2 flop sync - 2 flop sync wont work for crossing faster to slower clock domain...
 module async_fifo_top #(
     parameter DATA_WIDTH = 8,
     parameter DEPTH = 10,
@@ -40,7 +40,7 @@ module async_fifo_top #(
   reg  [ADDR_WIDTH-1:0] wr_ptr;
   wire [ADDR_WIDTH-1:0] wr_ptr_gray;
   wire [ADDR_WIDTH-1:0] rd_ptr_gray_synced;
-  reg  [ADDR_WIDTH-1:0] rd_ptr_synced;
+  wire  [ADDR_WIDTH-1:0] rd_ptr_synced;
   wire [ADDR_WIDTH-1:0] rd_ptr_synced_minus_one;
   
   // READ domain signals
@@ -49,7 +49,7 @@ module async_fifo_top #(
   reg  [ADDR_WIDTH-1:0] rd_ptr;
   wire [ADDR_WIDTH-1:0] rd_ptr_gray;
   wire [ADDR_WIDTH-1:0] wr_ptr_gray_synced;
-  reg  [ADDR_WIDTH-1:0] wr_ptr_synced;
+  wire  [ADDR_WIDTH-1:0] wr_ptr_synced;
   
 
   dual_port_ram #(
@@ -72,13 +72,9 @@ module async_fifo_top #(
           begin
               wr_ptr <= 0;
           end
-        else if (wr_en && wr_ptr == rd_ptr_synced_minus_one) // use full condition directly to avoid 1 clock latency
+        else if (wr_en && !(wr_ptr == rd_ptr_synced_minus_one)) // use full condition directly to avoid 1 clock latency
           begin
               wr_ptr <= (wr_ptr == DEPTH - 1) ? 0 : wr_ptr + 1;
-          end
-        else if (wr_en && full_r)
-          begin
-              overflow <= 1;
           end
     end
 
@@ -110,7 +106,21 @@ module async_fifo_top #(
       .binary_in (wr_ptr),
       .gray_out  (wr_ptr_gray)
   );
-  
+
+  gray2bin #(
+      .WIDTH(ADDR_WIDTH)
+  ) rd_gray_decoder (
+      .gray_in    (rd_ptr_gray_synced),
+      .binary_out (rd_ptr_synced)
+  );
+
+  gray2bin #(
+      .WIDTH(ADDR_WIDTH)
+  ) wr_gray_decoder (
+      .gray_in    (wr_ptr_gray_synced),
+      .binary_out (wr_ptr_synced)
+  );
+
 //------------------------------------------
 // RD<->WR CDC crossings
 //------------------------------------------
@@ -141,13 +151,33 @@ module async_fifo_top #(
     end
     
   assign rd_ptr_synced_minus_one = rd_ptr_synced - 1;
+
+
+  always @(wr_clk)
+    begin
+        if (wr_rst)
+          begin
+              overflow <= 1'b0;
+          end
+        else
+          begin
+              if (wr_en && full_r)
+                begin
+                    overflow <= 1'b1;
+                end
+              else
+                begin
+                    overflow <= 1'b0;
+                end
+          end
+    end
   
 //------------------------------------------
 // Empty logic
 //------------------------------------------
   always @(posedge rd_clk)
     begin
-        if (wr_rst)
+        if (rd_rst)
           begin
               empty_r <= FULL_RST_STATE;
           end
@@ -163,9 +193,29 @@ module async_fifo_top #(
                 end
           end
     end
-    
+   
+  always @(rd_clk)
+    begin
+        if (rd_rst)
+          begin
+              underflow <= 1'b0;
+          end
+        else
+          begin
+              if (rd_en && empty_r)
+                begin
+                    underflow <= 1'b1;
+                end
+              else
+                begin
+                    underflow <= 1'b0;
+                end
+          end
+    end
+
+ 
   assign full = full_r;
   assign empty = empty_r;
     
     
-endmodule
+endmodule  
