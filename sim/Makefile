@@ -38,6 +38,7 @@ CLEAN_TARGET += xsim.dir
 
 ## RTL sources
 RTL_DEPS += ../rtl/async_fifo_top.v
+RTL_DEPS += ../rtl/gray2bin.v
 RTL_DEPS += ../rtl/bin2gray.v
 RTL_DEPS += ../rtl/dual_port_ram.v
 RTL_DEPS += ../rtl/cdc_dff.v
