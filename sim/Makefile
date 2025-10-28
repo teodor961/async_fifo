@@ -41,7 +41,8 @@ RTL_DEPS += ../rtl/async_fifo_top.v
 RTL_DEPS += ../rtl/gray2bin.v
 RTL_DEPS += ../rtl/bin2gray.v
 RTL_DEPS += ../rtl/dual_port_ram.v
-RTL_DEPS += ../rtl/cdc_dff.v
+
+LIB_DEPS += ../libs/generic/rtl/cdc_sync_dff.v
 
 TB_DEPS += tb/async_fifo_seq_item.sv
 TB_DEPS += tb/async_fifo_sequence.sv
@@ -81,9 +82,9 @@ xsim.dir/work/tb_async_fifo.sdb: $(TB_DEPS)
 	    exit 1; \
 	fi;
 	
-xsim.dir/work/async_fifo_top.sdb: $(RTL_DEPS)
+xsim.dir/work/async_fifo_top.sdb: $(RTL_DEPS) $(LIB_DEPS)
 	@echo -n "Compile design sources for $(HL)async_fifo$(NC) ... "
-	@if xvlog $(RTL_DEPS) > async_fifo_compile.log; then \
+	@if xvlog $(RTL_DEPS) $(LIB_DEPS) > async_fifo_compile.log; then \
 		echo " $(GREEN)OK$(NC)"; \
 	else \
 	    echo " $(RED)FAILED$(NC)"; \

@@ -124,9 +124,9 @@ module async_fifo_top #(
 //------------------------------------------
 // RD<->WR CDC crossings
 //------------------------------------------
-  cdc_dff #(.DATA_WIDTH(1))          cdc_rd_rst(.clk_dest(rd_clk), .din(wr_rst),      .dout(rd_rst));
-  cdc_dff #(.DATA_WIDTH(ADDR_WIDTH)) cdc_wr_ptr(.clk_dest(rd_clk), .din(wr_ptr_gray), .dout(wr_ptr_gray_synced));
-  cdc_dff #(.DATA_WIDTH(ADDR_WIDTH)) cdc_rd_ptr(.clk_dest(wr_clk), .din(rd_ptr_gray), .dout(rd_ptr_gray_synced));
+  cdc_sync_dff #(.DATA_WIDTH(1))          cdc_rd_rst(.clk_dest(rd_clk), .din(wr_rst),      .dout(rd_rst));
+  cdc_sync_dff #(.DATA_WIDTH(ADDR_WIDTH)) cdc_wr_ptr(.clk_dest(rd_clk), .din(wr_ptr_gray), .dout(wr_ptr_gray_synced));
+  cdc_sync_dff #(.DATA_WIDTH(ADDR_WIDTH)) cdc_rd_ptr(.clk_dest(wr_clk), .din(rd_ptr_gray), .dout(rd_ptr_gray_synced));
   
 //------------------------------------------
 // Full logic
