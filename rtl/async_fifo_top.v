@@ -10,7 +10,7 @@
 //                  \_ bin2gray.v -> gray encoder for sync logic 
 //                  \_ gray2bin.v -> gray decoder for sync logic 
 //
-// TODO: Create handshake synchronizer to replace 2 flop sync - 2 flop sync wont work for crossing faster to slower clock domain...
+
 module async_fifo_top #(
     parameter DATA_WIDTH = 8,
     parameter DEPTH = 10,
