@@ -7,9 +7,10 @@
 //              extends uvm_sequence_item class
 //
 //
-
+import tb_pkg::*;
 import uvm_pkg::*;
 `include "uvm_macros.svh"
+
 
 class fifo_seq_item extends uvm_sequence_item;
 
@@ -20,13 +21,10 @@ class fifo_seq_item extends uvm_sequence_item;
     rand int tmp_depth = 8;
     int data_depth;
     
+    rand ctrl_flow_mode_t ctrl_flow_mode;
+    
     // Dynamic array of packed vectors with fixed width
     rand  bit [DATA_WIDTH_CONST-1: 0] data_vector [];
-    
-    // Control signals
-    rand bit wr_en;
-    rand bit rd_en;
-    
     
     function new(string name = "fifo_seq_item");
         super.new(name);
@@ -47,9 +45,9 @@ class fifo_seq_item extends uvm_sequence_item;
     endfunction
     
     `uvm_object_utils_begin(fifo_seq_item)
-      `uvm_field_array_int(data_vector, UVM_DEFAULT)
-      `uvm_field_int(wr_en,       UVM_DEFAULT)
-      `uvm_field_int(rd_en,       UVM_DEFAULT)            
+      `uvm_field_int(data_depth, UVM_DEFAULT | UVM_DEC)
+      `uvm_field_array_int(data_vector, UVM_DEFAULT)       
+      `uvm_field_enum(ctrl_flow_mode_t, ctrl_flow_mode, UVM_DEFAULT)  
     `uvm_object_utils_end
 
     
