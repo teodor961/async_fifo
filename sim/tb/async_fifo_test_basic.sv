@@ -26,13 +26,15 @@ class async_fifo_test_basic extends uvm_test;
         u_async_fifo_env = async_fifo_env::type_id::create("u_async_fifo_env", this);
         if (!uvm_config_db #(virtual async_fifo_if)::get(this, "", "async_fifo_vif", async_fifo_vif))
             `uvm_fatal("TEST", "Did not get async_fifo_vif")
-        uvm_config_db#(virtual async_fifo_if)::set(this, "async_fifo_env.async_fifo_agent.*", "async_fifo_vif", async_fifo_vif);
+        uvm_config_db#(virtual async_fifo_if)::set(this, "async_fifo_env.async_fifo_wr_agent.*", "async_fifo_vif", async_fifo_vif);
         
     endfunction
 
-    virtual function void end_of_elaboration_phase (uvm_phase phase);
-        uvm_top.print_topology ();
-    endfunction
+	virtual function void end_of_elaboration_phase(uvm_phase phase);
+		super.end_of_elaboration_phase(phase);
+		uvm_top.print_topology();
+		uvm_factory::get().print();
+	endfunction
     
     virtual task run_phase(uvm_phase phase);
         fifo_sequence seq = fifo_sequence::type_id::create("seq");
@@ -48,7 +50,7 @@ class async_fifo_test_basic extends uvm_test;
         apply_reset();
         
         `uvm_info("TEST", "Starting FIFO sequence", UVM_LOW)
-        seq.start(u_async_fifo_env.u_async_fifo_agent.u_async_fifo_sequencer);
+        seq.start(u_async_fifo_env.u_async_fifo_wr_agent.u_async_fifo_sequencer);
         `uvm_info("TEST", "FIFO sequence completed", UVM_LOW)
         
         phase.drop_objection(this);
