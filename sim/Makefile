@@ -44,19 +44,27 @@ RTL_DEPS += ../rtl/dual_port_ram.v
 
 LIB_DEPS += ../libs/generic/rtl/cdc_sync_dff.v
 
+## TODO: Figure out best compile order
+## TODO: Decide if you wana keep the tb_pkg format or just drop it
+TB_DEPS += tb/tb_pkg.sv
 TB_DEPS += tb/async_fifo_seq_item.sv
 TB_DEPS += tb/async_fifo_sequence.sv
 TB_DEPS += tb/async_fifo_sequencer.sv
 TB_DEPS += tb/async_fifo_driver.sv
 TB_DEPS += tb/async_fifo_agent.sv
+TB_DEPS += tb/async_fifo_wr_driver.sv
+TB_DEPS += tb/async_fifo_wr_agent.sv
+TB_DEPS += tb/async_fifo_rd_driver.sv
+TB_DEPS += tb/async_fifo_rd_agent.sv
 TB_DEPS += tb/async_fifo_env.sv
-TB_DEPS += tb/async_fifo_if.sv
 TB_DEPS += tb/async_fifo_test_basic.sv
+TB_DEPS += tb/async_fifo_if.sv
 TB_DEPS += tb/tb_async_fifo.sv
 
 SIM_SEED := $(shell bash -c 'echo $$RANDOM')
 #SIM_SEED := 1000
-SIM_SWITCH := --sv_seed $(SIM_SEED) --testplusarg {"UVM_NO_RELNOTES INTG=123 UVM_VERBOSITY=UVM_HIGH"} --t
+verbosity ?= "UVM_HIGH"
+SIM_SWITCH := --sv_seed $(SIM_SEED) --testplusarg {"UVM_NO_RELNOTES INTG=123 UVM_VERBOSITY=${verbosity}"} --t
 GUI := 0
 
 
