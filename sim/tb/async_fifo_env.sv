@@ -24,7 +24,7 @@ class async_fifo_env extends uvm_env;
     
     virtual function void build_phase(uvm_phase phase);
         super.build_phase(phase);
-        `uvm_info("ENV", "Entered build phase", UVM_HIGH)
+        `uvm_info("ENV", "Entered build phase", UVM_DEBUG)
         u_async_fifo_wr_agent = async_fifo_wr_agent::type_id::create("u_async_fifo_wr_agent", this);
         u_async_fifo_rd_agent = async_fifo_rd_agent::type_id::create("u_async_fifo_rd_agent", this);
 
@@ -42,8 +42,7 @@ class async_fifo_env extends uvm_env;
         else `uvm_info("ENV", $sformatf("Got RD_DRV as: %s", rd_drv.get_full_name()), UVM_DEBUG)
         
         wr_drv.item_ap.connect(rd_drv.item_imp);
-        //u_async_fifo_wr_agent.u_async_fifo_driver.item_ap.connect(u_async_fifo_rd_agent.u_async_fifo_driver.item_imp);
-        // u_async_fifo_agent.u_async_fifo.connect(u_async_fifo_scoreboard.m_analysis_imp);
+
     endfunction
     
 endclass
