@@ -6,9 +6,10 @@
 // Description: Basic testbench for the async fifo module.
 //
 //
+
 import uvm_pkg::*;
 `include "uvm_macros.svh"
-
+ 
 module tb_async_fifo (
 
 );
@@ -86,10 +87,6 @@ integer i;
           //$display(" Integer is %d ",i);
           uvm_factory::get().print();
           
-          $display("Testing Sequence Item");
-          seq_item = fifo_seq_item::type_id::create();
-          seq_item.randomize();
-          seq_item.print();
       
           uvm_config_db#(int)::set(null, "*", "DATA_WIDTH", DATA_WIDTH);
           uvm_config_db#(virtual async_fifo_if)::set(uvm_root::get(),"*","async_fifo_vif",u_async_fifo_if);
