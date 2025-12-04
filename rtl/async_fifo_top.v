@@ -86,7 +86,7 @@ module async_fifo_top #(
           end
         else if (rd_en )
           begin
-              rd_ptr <= (rd_ptr == DEPTH - 1) ? 0 : wr_ptr + 1;
+              rd_ptr <= (rd_ptr == DEPTH - 1) ? 0 : rd_ptr + 1;
           end
     end
 
