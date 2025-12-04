@@ -57,10 +57,12 @@ class async_fifo_test_basic extends uvm_test;
     endtask
     
     virtual task apply_reset();
+        `uvm_info("TEST", "Applying reset", UVM_DEBUG)
         async_fifo_vif.wr_rst <= 1;
         repeat(5) @ (posedge async_fifo_vif.wr_clk);
         async_fifo_vif.wr_rst <= 0;
         repeat(5) @ (posedge async_fifo_vif.wr_clk);
+        `uvm_info("TEST", "Reset done", UVM_DEBUG)
     endtask
     
 endclass

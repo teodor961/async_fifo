@@ -13,7 +13,6 @@ import uvm_pkg::*;
 
 
 class fifo_seq_item extends uvm_sequence_item;
-
     // Fixed widths as parameters/constants
     localparam int DATA_WIDTH_CONST = 8;
     localparam int DEPTH_CONST = 16;
