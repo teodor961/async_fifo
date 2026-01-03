@@ -24,13 +24,15 @@ class async_fifo_rd_driver extends async_fifo_driver;
         // Override default logging name
         m_driver_name = "RD_DRIVER";
         item_imp = new("item_imp", this); // create analysis implementation
+        wr_item = fifo_seq_item::type_id::create("wr_item", this);
+        rd_item = fifo_seq_item::type_id::create("rd_item", this);
     endfunction
     
     // Called automatically when write driver calls item_ap.write()
     function void write(fifo_seq_item m_item);
         if (m_item != null)
           begin
-              wr_item = m_item; // store the item
+              wr_item.copy(m_item); // store the item
               rd_item.copy(m_item);
           end
         else
@@ -68,8 +70,8 @@ class async_fifo_rd_driver extends async_fifo_driver;
                  end
                wait(async_fifo_vif.empty == 0)
                @(posedge async_fifo_vif.rd_clk)
-                 //rd_item.data_vector[i] = async_fifo_vif.rd_data;
-                 rd_item.data_vector[i] = 8'hae;
+                 rd_item.data_vector[i] = async_fifo_vif.rd_data;
+                 //rd_item.data_vector[i] = 8'hae;
                  async_fifo_vif.rd_en <= 1;
            end
          
