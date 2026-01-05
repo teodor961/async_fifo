@@ -153,7 +153,7 @@ module async_fifo_top #(
   assign rd_ptr_synced_minus_one = rd_ptr_synced - 1;
 
 
-  always @(wr_clk)
+  always @(posedge wr_clk)
     begin
         if (wr_rst)
           begin
@@ -194,7 +194,7 @@ module async_fifo_top #(
           end
     end
    
-  always @(rd_clk)
+  always @(posedge rd_clk)
     begin
         if (rd_rst)
           begin
