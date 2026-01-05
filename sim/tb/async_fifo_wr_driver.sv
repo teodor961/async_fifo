@@ -53,7 +53,8 @@ class async_fifo_wr_driver extends async_fifo_driver;
                  begin
                      `uvm_info(m_driver_name, "Driving as RANDOM", UVM_DEBUG)
                      //`uvm_info(m_driver_name, $sformatf("Random delay: %d", $urandom_range(10, 200) ), UVM_HIGH);
-                     #($urandom_range(10, 200)) async_fifo_vif.wr_en <= 1;
+                     //#($urandom_range(10, 200)) async_fifo_vif.wr_en <= 1;
+                     async_fifo_vif.wr_en <= 1;
                  end
            end
          // One clock cycle for the last data byte to be read
